@@ -1,4 +1,4 @@
-all: tarball hash clean
+all: tarball hash clean versions
 
 tarball: install.py ramsay.py
 	tar -cvf ${VERSION}.tar.xz $?
@@ -8,6 +8,10 @@ hash: ${VERSION}.tar.xz
 	cat ${VERSION}.tar.xz | md5 > ${VERSION}.tar.xz.md5b
 	head -c 32 ${VERSION}.tar.xz.md5b > ${VERSION}.tar.xz.md5
 	$(info Hash)
+
+versions:
+	mv ${VERSION}.tar.xz versions/
+	mv ${VERSION}.tar.xz.md5 versions/
 
 install: ${VERSION}.tar.xz ${VERSION}.tar.xz.md5
 	cp ${VERSION}.tar.xz /data/web/nebps/ramsay
