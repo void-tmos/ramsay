@@ -1,4 +1,10 @@
-all: tarball hash clean versions
+all: check tarball hash clean move
+
+check:
+ifndef VERSION
+	@echo Warning: VERSION isn\'t defined\; continue? [Y/n]
+	@read line; if [ $$line = "n" ]; then echo aborting; exit 1 ; fi
+endif
 
 tarball: install.py ramsay.py
 	tar -cvf ${VERSION}.tar.xz $?
@@ -9,13 +15,9 @@ hash: ${VERSION}.tar.xz
 	head -c 32 ${VERSION}.tar.xz.md5b > ${VERSION}.tar.xz.md5
 	$(info Hash)
 
-versions:
+move:
 	mv ${VERSION}.tar.xz versions/
 	mv ${VERSION}.tar.xz.md5 versions/
-
-install: ${VERSION}.tar.xz ${VERSION}.tar.xz.md5
-	cp ${VERSION}.tar.xz /data/web/nebps/ramsay
-	cp ${VERSION}.tar.xz.md5 /data/web/nebps/ramsay
 
 clean:
 	$(info Cleaning)
